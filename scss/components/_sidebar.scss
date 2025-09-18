@@ -1,0 +1,297 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+// Sidebar
+//
+// Responsive sidebar component for navigation and content organization
+
+.sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: $sidebar-width;
+  min-height: 100vh;
+  background-color: $sidebar-bg;
+  border-right: $sidebar-border-width solid $sidebar-border-color;
+  transition: all $sidebar-transition-duration $sidebar-transition-timing;
+}
+
+// Sidebar variations
+.sidebar-light {
+  background-color: $sidebar-light-bg;
+  border-color: $sidebar-light-border-color;
+  
+  .sidebar-link {
+    color: $sidebar-light-color;
+    
+    &:hover {
+      color: $sidebar-light-hover-color;
+      background-color: $sidebar-light-hover-bg;
+    }
+    
+    &.active {
+      color: $sidebar-light-active-color;
+      background-color: $sidebar-light-active-bg;
+    }
+  }
+  
+  .sidebar-heading {
+    color: $sidebar-light-heading-color;
+  }
+}
+
+.sidebar-dark {
+  background-color: $sidebar-dark-bg;
+  border-color: $sidebar-dark-border-color;
+  
+  .sidebar-link {
+    color: $sidebar-dark-color;
+    
+    &:hover {
+      color: $sidebar-dark-hover-color;
+      background-color: $sidebar-dark-hover-bg;
+    }
+    
+    &.active {
+      color: $sidebar-dark-active-color;
+      background-color: $sidebar-dark-active-bg;
+    }
+  }
+  
+  .sidebar-heading {
+    color: $sidebar-dark-heading-color;
+  }
+}
+
+// Sidebar brand
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  padding: $sidebar-brand-padding-y $sidebar-brand-padding-x;
+  text-decoration: none;
+  white-space: nowrap;
+  
+  .sidebar-brand-icon {
+    font-size: $sidebar-brand-icon-size;
+    margin-right: $sidebar-brand-icon-spacing;
+  }
+  
+  .sidebar-brand-name {
+    font-size: $sidebar-brand-font-size;
+    font-weight: $sidebar-brand-font-weight;
+    color: $sidebar-brand-color;
+  }
+}
+
+// Sidebar navigation
+.sidebar-nav {
+  flex: 1;
+  padding: $sidebar-nav-padding;
+  overflow-y: auto;
+}
+
+// Sidebar sections
+.sidebar-section {
+  margin-bottom: $sidebar-section-margin;
+}
+
+.sidebar-heading {
+  display: flex;
+  align-items: center;
+  padding: $sidebar-heading-padding-y $sidebar-heading-padding-x;
+  margin-bottom: $sidebar-heading-margin;
+  font-size: $sidebar-heading-font-size;
+  font-weight: $sidebar-heading-font-weight;
+  text-transform: $sidebar-heading-text-transform;
+  letter-spacing: $sidebar-heading-letter-spacing;
+  color: $sidebar-heading-color;
+  
+  .sidebar-heading-icon {
+    margin-right: $sidebar-heading-icon-spacing;
+  }
+}
+
+// Sidebar links
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: $sidebar-link-padding-y $sidebar-link-padding-x;
+  margin-bottom: $sidebar-link-margin;
+  text-decoration: none;
+  border-radius: $sidebar-link-border-radius;
+  transition: all $sidebar-link-transition-duration $sidebar-link-transition-timing;
+  color: $sidebar-link-color;
+  
+  .sidebar-link-icon {
+    width: $sidebar-link-icon-width;
+    margin-right: $sidebar-link-icon-spacing;
+    text-align: center;
+  }
+  
+  .sidebar-link-text {
+    flex: 1;
+  }
+  
+  .sidebar-link-badge {
+    margin-left: auto;
+  }
+  
+  &:hover {
+    color: $sidebar-link-hover-color;
+    background-color: $sidebar-link-hover-bg;
+    text-decoration: none;
+  }
+  
+  &.active {
+    color: $sidebar-link-active-color;
+    background-color: $sidebar-link-active-bg;
+    font-weight: $sidebar-link-active-font-weight;
+  }
+  
+  &.disabled {
+    color: $sidebar-link-disabled-color;
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: $sidebar-link-disabled-opacity;
+  }
+}
+
+// Sidebar dropdown
+.sidebar-dropdown {
+  .sidebar-link {
+    position: relative;
+    
+    &::after {
+      content: '\f107';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      margin-left: auto;
+      transition: transform 0.3s ease;
+    }
+  }
+  
+  &.show {
+    .sidebar-link::after {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.sidebar-dropdown-menu {
+  display: none;
+  padding-left: $sidebar-dropdown-menu-indent;
+  
+  .show > & {
+    display: block;
+  }
+  
+  .sidebar-link {
+    padding: $sidebar-dropdown-link-padding-y $sidebar-dropdown-link-padding-x;
+    font-size: $sidebar-dropdown-link-font-size;
+  }
+}
+
+// Sidebar footer
+.sidebar-footer {
+  padding: $sidebar-footer-padding;
+  border-top: $sidebar-footer-border-width solid $sidebar-footer-border-color;
+}
+
+// Responsive sidebar
+.sidebar-responsive {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: $zindex-fixed;
+  transform: translateX(-100%);
+  
+  &.show {
+    transform: translateX(0);
+  }
+}
+
+// Sidebar overlay
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($black, 0.5);
+  z-index: $zindex-fixed - 1;
+  display: none;
+  
+  &.show {
+    display: block;
+  }
+}
+
+// Sidebar with main content
+.sidebar-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar-content {
+  flex: 1;
+  padding: $content-padding;
+  transition: margin-left $sidebar-transition-duration $sidebar-transition-timing;
+}
+
+// Sidebar collapsed state
+.sidebar-collapsed {
+  width: $sidebar-collapsed-width;
+  
+  .sidebar-brand-name,
+  .sidebar-link-text,
+  .sidebar-heading-text {
+    display: none;
+  }
+  
+  .sidebar-link {
+    justify-content: center;
+    padding: $sidebar-collapsed-link-padding;
+    
+    .sidebar-link-icon {
+      margin-right: 0;
+    }
+  }
+  
+  .sidebar-dropdown-menu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    min-width: $sidebar-dropdown-menu-width;
+    background-color: $sidebar-bg;
+    border: $sidebar-border-width solid $sidebar-border-color;
+    border-radius: $sidebar-link-border-radius;
+    box-shadow: $sidebar-dropdown-box-shadow;
+    padding: $sidebar-dropdown-menu-padding;
+    z-index: $zindex-dropdown;
+  }
+}
+
+// Responsive behavior
+@include media-breakpoint-up(lg) {
+  .sidebar-lg-responsive {
+    position: relative;
+    transform: none;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .sidebar-md-responsive {
+    position: fixed;
+    transform: translateX(-100%);
+    
+    &.show {
+      transform: translateX(0);
+    }
+  }
+  
+  .sidebar-content {
+    margin-left: 0;
+  }
+}
+

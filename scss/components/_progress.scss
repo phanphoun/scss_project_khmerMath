@@ -1,0 +1,61 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+// Base progress styles
+.progress {
+  display: flex;
+  height: $progress-height;
+  overflow: hidden; // force rounded corners by cropping it
+  @include font-size($progress-font-size);
+  background-color: $progress-bg;
+  @include border-radius($progress-border-radius);
+  @include box-shadow($progress-box-shadow);
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: $progress-bar-color;
+  text-align: center;
+  white-space: nowrap;
+  background-color: $progress-bar-bg;
+  @include transition($progress-bar-transition);
+}
+
+// Striped
+.progress-bar-striped {
+  @include gradient-striped();
+  background-size: $progress-height $progress-height;
+}
+
+// Animated
+.progress-bar-animated {
+  @include animation($progress-bar-animation-timing);
+}
+
+// Multiple bars
+.progress {
+  .progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+  }
+}
+
+// Sizes
+.progress-sm {
+  height: $progress-height-sm;
+}
+
+.progress-lg {
+  height: $progress-height-lg;
+}
+
+// Colors
+@each $color, $value in $theme-colors {
+  .bg-#{$color} {
+    background-color: $value;
+  }
+}

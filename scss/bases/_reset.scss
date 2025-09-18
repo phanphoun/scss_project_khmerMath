@@ -1,18 +1,96 @@
-/* Box sizing rules */
-*,
-*::before,
-*::after {
+
+
+*{
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-/* Remove default margin */
-* {
-  margin: 0;
-  padding: 0;
+html{
+  font-size: 62.5%;
 }
 
-/* Set core body defaults */
-body {
-  min-height: 100vh;
-  line-height: 1.5;
+body{
+  font-size: 1.6rem;
+  font-family: $font-family-base;
+}
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+ul, ol{
+  list-style: none;
+}
+
+img{
+  max-width: 100%;
+  display: block;
+}
+button{
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input, textarea{
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  border: none;
+}
+
+table{
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+// Utility classes
+.hidden {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.text-center {
+  text-align: center !important;
+}
+.text-right {
+  text-align: right !important;
+}
+.text-left {
+  text-align: left !important;
+}
+.float-left {
+  float: left !important;
+}
+.float-right {
+  float: right !important;
+}
+.overflow-hidden {
+  overflow: hidden !important;
+}
+.overflow-scroll {
+  overflow: scroll !important;
+}
+.overflow-auto {
+  overflow: auto !important;
+}
+.position-relative {
+  position: relative !important;
 }

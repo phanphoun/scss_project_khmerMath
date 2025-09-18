@@ -1,0 +1,112 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Spacing utilities
+// Generate spacing utilities for margins and paddings
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @include media-breakpoint-up($breakpoint) {
+    // Margin utilities
+    @each $size, $length in $spacers {
+      .m#{$infix}-#{$size} { margin: $length !important; }
+      .mt#{$infix}-#{$size},
+      .my#{$infix}-#{$size} {
+        margin-top: $length !important;
+      }
+      .mr#{$infix}-#{$size},
+      .mx#{$infix}-#{$size} {
+        margin-right: $length !important;
+      }
+      .mb#{$infix}-#{$size},
+      .my#{$infix}-#{$size} {
+        margin-bottom: $length !important;
+      }
+      .ml#{$infix}-#{$size},
+      .mx#{$infix}-#{$size} {
+        margin-left: $length !important;
+      }
+    }
+
+    // Negative margin utilities
+    @each $size, $length in $spacers {
+      @if $size != 0 {
+        .m#{$infix}-n#{$size} { margin: -$length !important; }
+        .mt#{$infix}-n#{$size},
+        .my#{$infix}-n#{$size} {
+          margin-top: -$length !important;
+        }
+        .mr#{$infix}-n#{$size},
+        .mx#{$infix}-n#{$size} {
+          margin-right: -$length !important;
+        }
+        .mb#{$infix}-n#{$size},
+        .my#{$infix}-n#{$size} {
+          margin-bottom: -$length !important;
+        }
+        .ml#{$infix}-n#{$size},
+        .mx#{$infix}-n#{$size} {
+          margin-left: -$length !important;
+        }
+      }
+    }
+
+    // Padding utilities
+    @each $size, $length in $spacers {
+      .p#{$infix}-#{$size} { padding: $length !important; }
+      .pt#{$infix}-#{$size},
+      .py#{$infix}-#{$size} {
+        padding-top: $length !important;
+      }
+      .pr#{$infix}-#{$size},
+      .px#{$infix}-#{$size} {
+        padding-right: $length !important;
+      }
+      .pb#{$infix}-#{$size},
+      .py#{$infix}-#{$size} {
+        padding-bottom: $length !important;
+      }
+      .pl#{$infix}-#{$size},
+      .px#{$infix}-#{$size} {
+        padding-left: $length !important;
+      }
+    }
+  }
+}
+
+// Gap utilities
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @include media-breakpoint-up($breakpoint) {
+    @each $size, $length in $spacers {
+      .gap#{$infix}-#{$size} { gap: $length !important; }
+      .gap-x#{$infix}-#{$size} {
+        column-gap: $length !important;
+      }
+      .gap-y#{$infix}-#{$size} {
+        row-gap: $length !important;
+      }
+    }
+  }
+}
+
+// Auto margins
+.m-auto { margin: auto !important; }
+.mt-auto,
+.my-auto {
+  margin-top: auto !important;
+}
+.mr-auto,
+.mx-auto {
+  margin-right: auto !important;
+}
+.mb-auto,
+.my-auto {
+  margin-bottom: auto !important;
+}
+.ml-auto,
+.mx-auto {
+  margin-left: auto !important;
+}

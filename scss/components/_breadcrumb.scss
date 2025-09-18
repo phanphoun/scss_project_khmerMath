@@ -1,0 +1,195 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+// Breadcrumb
+//
+// Responsive breadcrumb navigation component
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  padding: $breadcrumb-padding-y $breadcrumb-padding-x;
+  margin-bottom: $breadcrumb-margin-bottom;
+  list-style: none;
+  background-color: $breadcrumb-bg;
+  @include border-radius($breadcrumb-border-radius);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  
+  // The separator between breadcrumbs (by default, a forward-slash: "/")
+  + .breadcrumb-item {
+    padding-left: $breadcrumb-item-padding-x;
+    
+    &::before {
+      display: inline-block; // Suppress underlining of the separator in modern browsers
+      padding-right: $breadcrumb-item-padding-x;
+      color: $breadcrumb-divider-color;
+      content: $breadcrumb-divider;
+    }
+  }
+  
+  // IE9-11 hack to properly handle hyperlink underlines for breadcrumbs built
+  // without `<ul>`s. The `::before` pseudo-element generates an element
+  // *within* the .breadcrumb-item and thereby inherits the `text-decoration`.
+  //
+  // To trick IE into suppressing the underline, we give the pseudo-element an
+  // underline and then immediately remove it.
+  + .breadcrumb-item:hover::before {
+    text-decoration: underline;
+  }
+  
+  // stylelint-disable-next-line no-duplicate-selectors
+  + .breadcrumb-item:hover::before {
+    text-decoration: none;
+  }
+  
+  &.active {
+    color: $breadcrumb-active-color;
+  }
+}
+
+.breadcrumb-link {
+  color: $breadcrumb-link-color;
+  text-decoration: $breadcrumb-link-decoration;
+  
+  @include hover-focus {
+    color: $breadcrumb-link-hover-color;
+    text-decoration: $breadcrumb-link-hover-decoration;
+  }
+}
+
+// Breadcrumb variations
+.breadcrumb-primary {
+  @include breadcrumb-variant($primary);
+}
+
+.breadcrumb-secondary {
+  @include breadcrumb-variant($secondary);
+}
+
+.breadcrumb-success {
+  @include breadcrumb-variant($success);
+}
+
+.breadcrumb-danger {
+  @include breadcrumb-variant($danger);
+}
+
+.breadcrumb-warning {
+  @include breadcrumb-variant($warning);
+}
+
+.breadcrumb-info {
+  @include breadcrumb-variant($info);
+}
+
+.breadcrumb-light {
+  @include breadcrumb-variant($light);
+}
+
+.breadcrumb-dark {
+  @include breadcrumb-variant($dark);
+}
+
+// Breadcrumb sizes
+.breadcrumb-sm {
+  padding: $breadcrumb-padding-y-sm $breadcrumb-padding-x-sm;
+  @include font-size($breadcrumb-font-size-sm);
+  
+  .breadcrumb-item {
+    + .breadcrumb-item {
+      padding-left: $breadcrumb-item-padding-x-sm;
+      
+      &::before {
+        padding-right: $breadcrumb-item-padding-x-sm;
+      }
+    }
+  }
+}
+
+.breadcrumb-lg {
+  padding: $breadcrumb-padding-y-lg $breadcrumb-padding-x-lg;
+  @include font-size($breadcrumb-font-size-lg);
+  
+  .breadcrumb-item {
+    + .breadcrumb-item {
+      padding-left: $breadcrumb-item-padding-x-lg;
+      
+      &::before {
+        padding-right: $breadcrumb-item-padding-x-lg;
+      }
+    }
+  }
+}
+
+// Breadcrumb with custom icons
+.breadcrumb-icon {
+  .breadcrumb-item {
+    + .breadcrumb-item {
+      &::before {
+        content: '';
+        width: $breadcrumb-icon-width;
+        height: $breadcrumb-icon-height;
+        background-image: $breadcrumb-icon;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+  }
+}
+
+// Breadcrumb with no background
+.breadcrumb-transparent {
+  background-color: transparent;
+  padding: 0;
+}
+
+// Breadcrumb alignment
+.breadcrumb-center {
+  justify-content: center;
+}
+
+.breadcrumb-end {
+  justify-content: flex-end;
+}
+
+// Responsive breadcrumb
+@include media-breakpoint-down(sm) {
+  .breadcrumb-responsive {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    .breadcrumb-item {
+      width: 100%;
+      
+      + .breadcrumb-item {
+        padding-left: 0;
+        padding-top: $breadcrumb-item-padding-y;
+        
+        &::before {
+          display: none;
+        }
+        
+        &::after {
+          content: $breadcrumb-divider;
+          padding-right: $breadcrumb-item-padding-x;
+          color: $breadcrumb-divider-color;
+        }
+      }
+    }
+  }
+}
+
+// Breadcrumb with ellipsis for long paths
+.breadcrumb-ellipsis {
+  .breadcrumb-item {
+    max-width: $breadcrumb-item-max-width;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

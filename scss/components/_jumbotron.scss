@@ -1,0 +1,112 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+// Jumbotron
+//
+// Lightweight, flexible component for showcasing hero unit style content.
+
+.jumbotron {
+  padding: $jumbotron-padding ($jumbotron-padding / 2);
+  margin-bottom: $jumbotron-padding;
+  background-color: $jumbotron-bg;
+  @include border-radius($jumbotron-border-radius);
+
+  @include media-breakpoint-up(sm) {
+    padding: ($jumbotron-padding * 2) $jumbotron-padding;
+  }
+}
+
+.jumbotron-fluid {
+  padding-right: 0;
+  padding-left: 0;
+  @include border-radius(0);
+}
+
+// Jumbotron variations
+.jumbotron-primary {
+  @include jumbotron-variant($primary, $white);
+}
+
+.jumbotron-secondary {
+  @include jumbotron-variant($secondary, $white);
+}
+
+.jumbotron-success {
+  @include jumbotron-variant($success, $white);
+}
+
+.jumbotron-danger {
+  @include jumbotron-variant($danger, $white);
+}
+
+.jumbotron-warning {
+  @include jumbotron-variant($warning, $white);
+}
+
+.jumbotron-info {
+  @include jumbotron-variant($info, $white);
+}
+
+.jumbotron-light {
+  @include jumbotron-variant($light, $gray-800);
+}
+
+.jumbotron-dark {
+  @include jumbotron-variant($dark, $white);
+}
+
+// Jumbotron with background image
+.jumbotron-image {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    @include border-radius($jumbotron-border-radius);
+  }
+  
+  .jumbotron-content {
+    position: relative;
+    z-index: 1;
+    color: $white;
+  }
+}
+
+.jumbotron-fluid.jumbotron-image {
+  &::before {
+    @include border-radius(0);
+  }
+}
+
+// Responsive jumbotron sizing
+.jumbotron-sm {
+  padding: $jumbotron-padding / 2;
+  
+  @include media-breakpoint-up(sm) {
+    padding: $jumbotron-padding;
+  }
+}
+
+.jumbotron-lg {
+  padding: ($jumbotron-padding * 1.5);
+  
+  @include media-breakpoint-up(sm) {
+    padding: ($jumbotron-padding * 3);
+  }
+}
+
+.jumbotron-xl {
+  padding: ($jumbotron-padding * 2);
+  
+  @include media-breakpoint-up(sm) {
+    padding: ($jumbotron-padding * 4);
+  }
+}

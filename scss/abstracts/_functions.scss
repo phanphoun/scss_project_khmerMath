@@ -1,0 +1,47 @@
+
+/// Converts pixel values to rem values based on a base font size (default is 16px)
+@function px-to-rem($px, $base: 16) {
+  @return ($px / $base) * 1rem;
+}
+
+/// Darkens a color by a specified percentage
+@function darken($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+/// Lightens a color by a specified percentage
+@function lighten($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+/// Converts a hex color to an rgba color with specified opacity
+@function hex-to-rgba($hex, $alpha) {
+  @return rgba(red($hex), green($hex), blue($hex), $alpha);
+}
+
+/// Calculates the contrast ratio between two colors
+@function contrast-ratio($color1, $color2) {
+  $l1: luminance($color1);
+  $l2: luminance($color2);
+  @if $l1 > $l2 {
+    @return ($l1 + 0.05) / ($l2 + 0.05);
+  } @else {
+    @return ($l2 + 0.05) / ($l1 + 0.05);
+  }
+}
+
+/// Calculates the luminance of a color
+@function luminance($color) {
+  $r: red($color);
+  $g: green($color);
+  $b: blue($color);
+  @return ($r * 0.2126) + ($g * 0.7152) + ($b * 0.0722);
+}
+
+
+// Mixin for media queries - max-width (breakpoint down)
+@mixin breakpoint-down($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}

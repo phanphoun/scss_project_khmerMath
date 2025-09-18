@@ -1,27 +1,108 @@
 @import '../abstracts/variables';
 
+
 body {
-  font-family: $font-primary;
-  font-size: $font-size-base;
-  color: $text-color;
-  line-height: 1.6;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    color: $font-color;
+    background-color: $background-color;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
-
 h1, h2, h3, h4, h5, h6 {
-  margin-bottom: $spacing-unit;
-  font-weight: 700;
-  line-height: 1.2;
+    font-family: $font-family-heading;
+    color: $heading-color;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
 }
-
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.75rem; }
-
+h1 {
+    font-size: 2.5rem;
+    font-weight: $font-weight-bold;
+}
+h2 {
+    font-size: 2rem;
+    font-weight: $font-weight-bold;
+}
+h3 {
+    font-size: 1.75rem;
+    font-weight: $font-weight-medium;
+}
+h4 {
+    font-size: 1.5rem;
+    font-weight: $font-weight-medium;
+}
+h5 {
+    font-size: 1.25rem;
+    font-weight: $font-weight-medium;
+}
+h6 {
+    font-size: 1rem;
+    font-weight: $font-weight-medium;
+}
+p {
+    margin-bottom: 1.5rem;
+}
 a {
-  color: $primary-color;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
+    color: $primary-color;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
 }
+strong {
+    font-weight: $font-weight-bold;
+}
+em {
+    font-style: italic;
+}
+small {
+    font-size: $font-size-sm;
+}
+blockquote {
+    border-left: 4px solid $border-color;
+    padding-left: 1rem;
+    color: darken($font-color, 20%);
+    margin: 1.5rem 0;
+    font-style: italic;
+    background-color: lighten($background-color, 5%);
+}
+code {
+    font-family: $font-family-monospace;
+    background-color: lighten($background-color, 10%);
+    padding: 0.2rem 0.4rem;
+    border-radius: $border-radius-sm;
+    font-size: 0.95em;
+}
+pre {
+    font-family: $font-family-monospace;
+    background-color: lighten($background-color, 10%);
+    padding: 1rem;
+    border-radius: $border-radius-sm;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+// Mixin for media queries - max-width (breakpoint down)
+@mixin breakpoint-down($breakpoint) {
+    @media (max-width: $breakpoint) {
+        @content;
+        }
+    } @if $breakpoint == mobile {
+    @media (max-width: $breakpoint-sm) {
+      @content;
+    }    
+  } @else if $breakpoint == tablet {
+    @media (max-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (max-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == large-desktop {
+    @media (max-width: $breakpoint-xl) {
+      @content;
+    }
+  } 
+}
+// Mixin for media queries - max-width (breakpoint down)

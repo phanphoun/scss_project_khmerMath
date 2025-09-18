@@ -1,0 +1,180 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Grid utilities
+
+// Container
+.container {
+  @include make-container();
+  @include make-container-max-widths();
+}
+
+// Container fluid
+.container-fluid {
+  @include make-container();
+}
+
+// Row
+.row {
+  @include make-row();
+}
+
+// Remove the gutters
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+
+  > .col,
+  > [class*="col-"] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+// Grid columns
+//
+// Generate the grid columns with any number of columns and any width
+
+@include make-grid-columns();
+
+// Grid system
+//
+// Generate semantic grid columns with these mixins
+
+@mixin make-grid-columns($columns: $grid-columns, $gutter: $grid-gutter-width, $breakpoints: $grid-breakpoints) {
+  // Common properties for all breakpoints
+  %grid-column {
+    position: relative;
+    width: 100%;
+    padding-right: $gutter / 2;
+    padding-left: $gutter / 2;
+  }
+
+  @each $breakpoint in map-keys($breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $breakpoints);
+
+    // Allow columns to stretch full width below their breakpoints
+    @for $i from 1 through $columns {
+      .col#{$infix}-#{$i} {
+        @extend %grid-column;
+      }
+    }
+
+    .col#{$infix},
+    .col#{$infix}-auto {
+      @extend %grid-column;
+    }
+
+    @include media-breakpoint-up($breakpoint, $breakpoints) {
+      // Provide basic `.col-{bp}` classes for equal-width flexbox columns
+      .col#{$infix} {
+        flex-basis: 0;
+        flex-grow: 1;
+        max-width: 100%;
+      }
+
+      @for $i from 1 through $grid-row-columns {
+        .row-cols#{$infix}-#{$i} {
+          @include row-cols($i);
+        }
+      }
+
+      .col#{$infix}-auto {
+        flex: 0 0 auto;
+        width: auto;
+        max-width: 100%;
+      }
+
+      @for $i from 1 through $columns {
+        .col#{$infix}-#{$i} {
+          @include make-col($i, $columns);
+        }
+      }
+
+      .order#{$infix}-first { order: -1; }
+
+      @for $i from 0 through $columns {
+        .order#{$infix}-#{$i} { order: $i; }
+      }
+
+      // `$columns - 1` because offsetting by the width of an entire column isn't possible
+      @for $i from 0 through ($columns - 1) {
+        @if not ($infix == "" and $i == 0) { // Avoid emitting useless .offset-0
+          .offset#{$infix}-#{$i} {
+            @include make-col-offset($i, $columns);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Grid gaps
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @include media-breakpoint-up($breakpoint) {
+    @each $size, $length in $spacers {
+      .g#{$infix}-#{$size},
+      .gx#{$infix}-#{$size} {
+        --#{$variable-prefix}gutter-x: #{$length};
+      }
+      .g#{$infix}-#{$size},
+      .gy#{$infix}-#{$size} {
+        --#{$variable-prefix}gutter-y: #{$length};
+      }
+    }
+  }
+}
+
+// Grid template columns
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @include media-breakpoint-up($breakpoint) {
+    .grid#{$infix} {
+      display: grid !important;
+    }
+  }
+}
+
+// Grid column and row utilities
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @include media-breakpoint-up($breakpoint) {
+    // Grid columns
+    @for $i from 1 through 12 {
+      .grid-cols#{$infix}-#{$i} {
+        grid-template-columns: repeat(#{$i}, minmax(0, 1fr)) !important;
+      }
+    }
+
+    // Grid rows
+    @for $i from 1 through 6 {
+      .grid-rows#{$infix}-#{$i} {
+        grid-template-rows: repeat(#{$i}, minmax(0, 1fr)) !important;
+      }
+    }
+
+    // Grid column start/end
+    @for $i from 1 through 13 {
+      .col-start#{$infix}-#{$i} {
+        grid-column-start: #{$i} !important;
+      }
+      .col-end#{$infix}-#{$i} {
+        grid-column-end: #{$i} !important;
+      }
+    }
+
+    // Grid row start/end
+    @for $i from 1 through 7 {
+      .row-start#{$infix}-#{$i} {
+        grid-row-start: #{$i} !important;
+      }
+      .row-end#{$infix}-#{$i} {
+        grid-row-end: #{$i} !important;
+      }
+    }
+  }
+}

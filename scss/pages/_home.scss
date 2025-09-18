@@ -1,23 +1,2 @@
 @import '../abstracts/variables';
 
-.hero {
-  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
-  color: white;
-  padding: $spacing-unit * 6 0;
-  text-align: center;
-
-  &__title {
-    font-size: 3rem;
-    margin-bottom: $spacing-unit * 2;
-  }
-
-  &__subtitle {
-    font-size: 1.5rem;
-    margin-bottom: $spacing-unit * 3;
-  }
-}
-
-.featured-products {
-  padding: $spacing-unit * 4 0;
-  background-color: $background-color;
-}

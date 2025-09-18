@@ -1,0 +1,91 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Color utilities
+
+// Text colors
+@each $color, $value in $theme-colors {
+  .text-#{$color} {
+    color: $value !important;
+  }
+}
+
+.text-white { color: $white !important; }
+.text-body { color: $body-color !important; }
+.text-muted { color: $text-muted !important; }
+.text-black-50 { color: rgba($black, .5) !important; }
+.text-white-50 { color: rgba($white, .5) !important; }
+
+// Background colors
+@each $color, $value in $theme-colors {
+  @include bg-variant(".bg-#{$color}", $value);
+}
+
+.bg-white { background-color: $white !important; }
+.bg-transparent { background-color: transparent !important; }
+.bg-body { background-color: $body-bg !important; }
+
+// Gradient backgrounds
+.bg-gradient {
+  background-image: $gradient !important;
+}
+
+// Responsive text colors
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @include media-breakpoint-up($breakpoint) {
+    @each $color, $value in $theme-colors {
+      .text#{$infix}-#{$color} {
+        color: $value !important;
+      }
+    }
+  }
+}
+
+// Responsive background colors
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @include media-breakpoint-up($breakpoint) {
+    @each $color, $value in $theme-colors {
+      .bg#{$infix}-#{$color} {
+        background-color: $value !important;
+      }
+    }
+  }
+}
+
+// Border colors
+@each $color, $value in $theme-colors {
+  .border-#{$color} {
+    border-color: $value !important;
+  }
+}
+
+.border-white { border-color: $white !important; }
+.border-transparent { border-color: transparent !important; }
+
+// Link colors
+@each $color, $value in $theme-colors {
+  .link-#{$color} {
+    color: $value;
+    @include hover {
+      color: darken($value, 15%);
+    }
+  }
+}
+
+// Fill colors for SVG
+@each $color, $value in $theme-colors {
+  .fill-#{$color} {
+    fill: $value !important;
+  }
+}
+
+// Stroke colors for SVG
+@each $color, $value in $theme-colors {
+  .stroke-#{$color} {
+    stroke: $value !important;
+  }
+}

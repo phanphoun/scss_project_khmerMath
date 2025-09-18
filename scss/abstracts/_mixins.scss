@@ -1,13 +1,558 @@
-// Responsive breakpoint manager
-@mixin respond-to($breakpoint) {
-  @media (min-width: $breakpoint) {
-    @content;
-  }
-}
+// ==============================================================
+//  COMPREHENSIVE CSS FRAMEWORK MIXINS
+//  Bootstrap-like utility mixins for modern web development
+// ==============================================================
 
-// Flexbox mixin for quick centering
+// LAYOUT MIXINS
+// ==============================================================
+
+// Flexbox utilities
 @mixin flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-around {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin flex-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@mixin flex-stretch {
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+// RESPONSIVE BREAKPOINT MIXINS
+// ==============================================================
+
+// Media query mixin - breakpoint up (min-width)
+@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
+  $min: map-get($breakpoints, $name);
+  @if $min {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Media query mixin - breakpoint down (max-width)
+@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+  $max: map-get($breakpoints, $name);
+  @if $max {
+    @media (max-width: ($max - 0.02px)) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Media query mixin - breakpoint only (between min and max)
+@mixin media-breakpoint-only($name, $breakpoints: $grid-breakpoints) {
+  $min: map-get($breakpoints, $name);
+  $next: map-get($breakpoints, $name + 1);
+  
+  @if $min != null and $next != null {
+    @media (min-width: $min) and (max-width: ($next - 0.02px)) {
+      @content;
+    }
+  } @else if $min == null and $next != null {
+    @media (max-width: ($next - 0.02px)) {
+      @content;
+    }
+  } @else if $min != null and $next == null {
+    @media (min-width: $min) {
+      @content;
+    }
+  }
+}
+
+// Media query mixin - between two breakpoints
+@mixin media-breakpoint-between($lower, $upper, $breakpoints: $grid-breakpoints) {
+  $min: map-get($breakpoints, $lower);
+  $max: map-get($breakpoints, $upper);
+  
+  @if $min != null and $max != null {
+    @media (min-width: $min) and (max-width: ($max - 0.02px)) {
+      @content;
+    }
+  } @else if $max == null {
+    @include media-breakpoint-up($lower, $breakpoints) {
+      @content;
+    }
+  } @else if $min == null {
+    @include media-breakpoint-down($upper, $breakpoints) {
+      @content;
+    }
+  }
+}
+
+// GRID SYSTEM MIXINS
+// ==============================================================
+
+// Generate grid columns
+@mixin make-grid-columns($columns: $grid-columns, $gutter: $grid-gutter-width, $breakpoints: $grid-breakpoints) {
+  @each $breakpoint in map-keys($breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $breakpoints);
+    
+    @include media-breakpoint-up($breakpoint, $breakpoints) {
+      @for $i from 1 through $columns {
+        .col#{$infix}-#{$i} {
+          @include make-col($i, $columns);
+        }
+      }
+      
+      .col#{$infix},
+      .col#{$infix}-auto {
+        @include make-col-auto();
+      }
+      
+      @for $i from 1 through $columns {
+        .offset#{$infix}-#{$i} {
+          @include make-col-offset($i, $columns);
+        }
+      }
+    }
+  }
+}
+
+// Create column
+@mixin make-col($size, $columns: $grid-columns) {
+  flex: 0 0 percentage($size / $columns);
+  max-width: percentage($size / $columns);
+  padding-right: ($grid-gutter-width / 2);
+  padding-left: ($grid-gutter-width / 2);
+}
+
+// Create auto column
+@mixin make-col-auto() {
+  flex: 1 0 0%;
+  max-width: 100%;
+  padding-right: ($grid-gutter-width / 2);
+  padding-left: ($grid-gutter-width / 2);
+}
+
+// Create column offset
+@mixin make-col-offset($size, $columns: $grid-columns) {
+  $num: $size / $columns;
+  margin-left: if($num == 0, 0, percentage($num));
+}
+
+// Helper function for breakpoint infix
+@function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
+  @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
+}
+
+@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
+  $min: map-get($breakpoints, $name);
+  @return if($min != 0, $min, null);
+}
+
+// COMPONENT MIXINS
+// ==============================================================
+
+// Button variant mixin
+@mixin button-variant($background, $border, $hover-background: darken($background, 7.5%), $hover-border: darken($border, 10%), $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
+  color: color-contrast($background);
+  background-color: $background;
+  border-color: $border;
+  
+  &:hover {
+    color: color-contrast($hover-background);
+    background-color: $hover-background;
+    border-color: $hover-border;
+  }
+  
+  &:focus,
+  &.focus {
+    color: color-contrast($hover-background);
+    background-color: $hover-background;
+    border-color: $hover-border;
+    box-shadow: 0 0 0 $btn-focus-width rgba(mix(color-contrast($background), $background, 15%), 0.25);
+  }
+  
+  &:checked,
+  &[aria-checked="true"] {
+    background-color: $active-background;
+    border-color: $active-border;
+  }
+  
+  &:active,
+  &.active {
+    color: color-contrast($active-background);
+    background-color: $active-background;
+    border-color: $active-border;
+  }
+  
+  &:disabled,
+  &.disabled {
+    color: color-contrast($background);
+    background-color: $background;
+    border-color: $border;
+    opacity: $btn-disabled-opacity;
+  }
+}
+
+// Button outline variant mixin
+@mixin button-outline-variant($color, $color-hover: color-contrast($color), $active-background: $color, $active-border: $color) {
+  color: $color;
+  border-color: $color;
+  
+  &:hover {
+    color: $color-hover;
+    background-color: $active-background;
+    border-color: $active-border;
+  }
+  
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 $btn-focus-width rgba($color, 0.25);
+  }
+  
+  &:disabled,
+  &.disabled {
+    color: $color;
+    background-color: transparent;
+  }
+}
+
+// Button size mixin
+@mixin button-size($padding-y, $padding-x, $font-size, $border-radius) {
+  padding: $padding-y $padding-x;
+  font-size: $font-size;
+  border-radius: $border-radius;
+}
+
+// Form control mixin
+@mixin form-control() {
+  display: block;
+  width: 100%;
+  padding: $input-padding-y $input-padding-x;
+  font-family: $input-font-family;
+  font-size: $input-font-size;
+  font-weight: $input-font-weight;
+  line-height: $input-line-height;
+  color: $input-color;
+  background-color: $input-bg;
+  background-clip: padding-box;
+  border: $input-border-width solid $input-border-color;
+  
+  @include border-radius($input-border-radius);
+  @include box-shadow($input-box-shadow);
+  @include transition($transition-base);
+  
+  &:focus {
+    color: $input-focus-color;
+    background-color: $input-focus-bg;
+    border-color: $input-focus-border-color;
+    outline: 0;
+    @include box-shadow($input-focus-box-shadow);
+  }
+  
+  &::placeholder {
+    color: $input-placeholder-color;
+    opacity: 1;
+  }
+  
+  &:disabled,
+  &[readonly] {
+    background-color: $input-disabled-bg;
+    border-color: $input-disabled-border-color;
+    opacity: 1;
+  }
+}
+
+// Card variant mixin
+@mixin card-variant($background, $border) {
+  background-color: $background;
+  border-color: $border;
+}
+
+// UTILITY MIXINS
+// ==============================================================
+
+// Box shadow mixin
+@mixin box-shadow($shadow) {
+  box-shadow: $shadow;
+}
+
+// Border radius mixin
+@mixin border-radius($radius) {
+  border-radius: $radius;
+}
+
+@mixin border-top-radius($radius) {
+  border-top-left-radius: $radius;
+  border-top-right-radius: $radius;
+}
+
+@mixin border-right-radius($radius) {
+  border-top-right-radius: $radius;
+  border-bottom-right-radius: $radius;
+}
+
+@mixin border-bottom-radius($radius) {
+  border-bottom-right-radius: $radius;
+  border-bottom-left-radius: $radius;
+}
+
+@mixin border-left-radius($radius) {
+  border-top-left-radius: $radius;
+  border-bottom-left-radius: $radius;
+}
+
+// Transition mixin
+@mixin transition($transition) {
+  @if $transition != null {
+    transition: $transition;
+  }
+}
+
+@mixin transition-base() {
+  @include transition($transition-base);
+}
+
+@mixin transition-transform() {
+  @include transition($transition-transform);
+}
+
+@mixin transition-fade() {
+  @include transition($transition-fade);
+}
+
+// Transform mixins
+@mixin scale($value) {
+  transform: scale($value);
+}
+
+@mixin translate($x, $y) {
+  transform: translate($x, $y);
+}
+
+@mixin rotate($deg) {
+  transform: rotate($deg);
+}
+
+// Hover mixins
+@mixin hover() {
+  &:hover { @content; }
+}
+
+@mixin hover-focus() {
+  &:hover,
+  &:focus {
+    @content;
+  }
+}
+
+@mixin plain-hover-focus() {
+  &,
+  &:hover,
+  &:focus {
+    @content;
+  }
+}
+
+// Clearfix mixin
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}
+
+// Visually hidden mixin (accessibility)
+@mixin visually-hidden() {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+// Visually hidden focusable mixin
+@mixin visually-hidden-focusable() {
+  &:not(:focus):not(:focus-within) {
+    @include visually-hidden();
+  }
+}
+
+// Text utilities
+@mixin text-emphasis-variant($parent, $color) {
+  #{$parent} {
+    color: $color !important;
+  }
+
+  a#{$parent} {
+    @include hover-focus() {
+      color: darken($color, 10%) !important;
+    }
+  }
+}
+
+// Background utilities
+@mixin bg-variant($parent, $color) {
+  #{$parent} {
+    background-color: $color !important;
+  }
+
+  a#{$parent},
+  button#{$parent} {
+    @include hover-focus() {
+      background-color: darken($color, 10%) !important;
+    }
+  }
+}
+
+// Gradient mixin
+@mixin gradient($color: null, $image: null, $direction: to right) {
+  @if $color {
+    background: $color linear-gradient($direction, $color, darken($color, 15%));
+  } @else if $image {
+    background: $image;
+  }
+}
+
+// Size mixin
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+// Triangle mixin (for CSS arrows)
+@mixin triangle($direction, $size, $color) {
+  width: 0;
+  height: 0;
+  border: $size solid transparent;
+  
+  @if $direction == up {
+    border-bottom-color: $color;
+  } @else if $direction == right {
+    border-left-color: $color;
+  } @else if $direction == down {
+    border-top-color: $color;
+  } @else if $direction == left {
+    border-right-color: $color;
+  }
+}
+
+// Placeholder mixin
+@mixin placeholder() {
+  &::placeholder {
+    @content;
+  }
+}
+
+// Full width mixin
+@mixin full-width() {
+  width: 100%;
+  left: 0;
+}
+
+// Center block mixin
+@mixin center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// ANIMATION MIXINS
+// ==============================================================
+
+// Fade animation
+@mixin fade() {
+  opacity: 0;
+  @include transition($transition-fade);
+  
+  &.show {
+    opacity: 1;
+  }
+}
+
+// Collapse animation
+@mixin collapse() {
+  &:not(.show) {
+    display: none;
+  }
+}
+
+// Responsive embed mixin
+@mixin responsive-embed($aspect-ratio: 16 by 9) {
+  $ratio-y: 9;
+  $ratio-x: 16;
+  
+  @if $aspect-ratio == 21 by 9 {
+    $ratio-y: 9;
+    $ratio-x: 21;
+  } @else if $aspect-ratio == 16 by 9 {
+    $ratio-y: 9;
+    $ratio-x: 16;
+  } @else if $aspect-ratio == 4 by 3 {
+    $ratio-y: 3;
+    $ratio-x: 4;
+  } @else if $aspect-ratio == 1 by 1 {
+    $ratio-y: 1;
+    $ratio-x: 1;
+  }
+  
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  
+  &::before {
+    display: block;
+    content: "";
+    padding-top: percentage($ratio-y / $ratio-x);
+  }
+  
+  .embed-responsive-item,
+  iframe,
+  embed,
+  video,
+  object {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
 }
